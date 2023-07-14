@@ -13,6 +13,11 @@
 				font-weight: bold;
 				padding: 20px;
 			}
+			.color {
+				float: left;
+				width: 100px;
+				height: 100px;
+			}
 		</style>
 	</head>
 	<body>
@@ -60,8 +65,8 @@
 							var g = data[index + 1];
 							var b = data[index + 2];
 							var a = data[index + 3];
-							var rgba = [r, g, b, a].join(",");
-							colors[rgba] = true;
+							const hex = rgbaToHex(r, g, b, a);
+							colors[hex] = true;
 
 							index += 4;
 						}
@@ -70,11 +75,31 @@
 					var count = 0;
 					for (var key in colors) {
 						++count;
+
+						const div = document.createElement("div");
+						div.className = "color";
+						div.onclick = () => {
+							div.style.display = "none";
+						};
+						div.style.background = key;
+						document.body.appendChild(div);
 					}
+					console.log(colors);
 					result.innerHTML = "Colors: " + count;
 				};
 				fileReader.readAsDataURL(file);
 			};
+
+			function rgbaToHex (r, g, b, a) {
+				const red = r.toString(16).padStart(2, '0');
+				const green = g.toString(16).padStart(2, '0');
+				const blue = b.toString(16).padStart(2, '0');
+				return `#${red}${green}${blue}`;
+				/*
+				const alpha = Math.round(a * 255).toString(16).padStart(2, '0');
+				return `#${red}${green}${blue}${alpha}`;
+				*/
+			}
 		</script>
 	</body>
 </html>
